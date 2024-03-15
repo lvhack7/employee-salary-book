@@ -1,3 +1,4 @@
+import readchar
 from assignG0234_backEnd import add_entry, view_entries, delete_entries
 
 def main():
@@ -32,6 +33,9 @@ def main():
             break
         else:
             print("Invalid input. Please enter a number between 1 and 4.")
+
+        print("Press any key to continue...")
+        k = readchar.readchar()
 
 if __name__ == "__main__":
     main()

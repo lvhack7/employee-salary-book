@@ -32,26 +32,46 @@ def add_entry():
 
         # Check if CSV file exists
         if os.path.isfile('salary_book.csv'):
-            existing_df = pd.read_csv('salary_book.csv')
-            updated_df = pd.concat([existing_df, df], ignore_index=True)
+            try:
+                existing_df = pd.read_csv('salary_book.csv')
+                updated_df = pd.concat([existing_df, df], ignore_index=True)
+            except pd.errors.EmptyDataError:
+                updated_df = df
         else:
             updated_df = df
 
         # Write updated DataFrame to CSV
         updated_df.to_csv('salary_book.csv', index=False)
-        print("Entry added successfully.")
+        print("Message: Entry added successfully.")
         return
 
 def view_entries():
     if os.path.isfile('salary_book.csv'):
-        df = pd.read_csv('salary_book.csv')
-        print(df)
+        try:
+            df = pd.read_csv('salary_book.csv')
+            if df.empty:
+                print("Message: Salary book is empty.")
+            else:
+                print(df)
+        except pd.errors.EmptyDataError:
+            print('Message: Salary book file is empty')
+        
     else:
-        print("Salary book is empty.")
+        print("Message: Salary book is empty.")
 
 def delete_entries():
     if os.path.isfile('salary_book.csv'):
-        os.remove('salary_book.csv')
-        print("All entries deleted successfully.")
+        try:
+            df = pd.read_csv('salary_book.csv')
+            if df.empty:
+                print("Message: Salary book is already empty.")
+            else:
+                f = open("salary_book.csv", "w")
+                f.truncate()
+                f.close()
+                print("Message: Deleted all entries successfully.")
+        except pd.errors.EmptyDataError:
+            print('Message: Salary book file is already empty')
     else:
-        print("Salary book is already empty.")
+        print("Message: Salary book is already empty.")
+
